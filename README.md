@@ -1,6 +1,6 @@
 # Music App
 
-Spotify API を使用して楽曲検索ができる React アプリです。
+Spotify APIを使用して楽曲検索ができるReactアプリです。
 
 ## 使用技術
 
