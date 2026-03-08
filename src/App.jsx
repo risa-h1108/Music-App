@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import SpotifyClient from "./lib/spotify";
+import { SongList } from "./components/SongList";
 
 export default function App() {
   useEffect(() => {
     async function init() {
       const spotify = await SpotifyClient.inittialize();
-      spotify.test();
+      spotify.getPopularSongs();
     }
     init();
   }, []);
@@ -18,6 +19,7 @@ export default function App() {
         </header>
         <section>
           <h2 className="text-2xl font-semibold mb-5">Popular Songs</h2>
+          <SongList />
         </section>
       </main>
     </div>
