@@ -1,7 +1,15 @@
-import { getToken } from "./lib/spotify";
+import { useEffect } from "react";
+import SpotifyClient from "./lib/spotify";
 
 export default function App() {
-  getToken();
+  useEffect(() => {
+    async function init() {
+      const spotify = await SpotifyClient.inittialize();
+      spotify.test();
+    }
+    init();
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-900 text-white">
       <main className="flex-1 p-8 mb-20">
