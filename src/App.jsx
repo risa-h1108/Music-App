@@ -1,15 +1,27 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import SpotifyClient from "./lib/spotify";
 import { SongList } from "./components/SongList";
 
 export default function App() {
+  const [isLoading, setIsLoading] = useState(null);
+  const [PopularSongs, setPopularSongs] = useState([]);
+
+  //取得したデータを表示する
   useEffect(() => {
     async function init() {
-      const spotify = await SpotifyClient.inittialize();
-      spotify.getPopularSongs();
+      const spotify = await SpotifyClient.initialize();
+      fetchPopularSongs();
     }
     init();
   }, []);
+
+  const fetchPopularSongs = async () => {
+    //ローディングする
+    setIsLoading(true);
+    //Apiを叩いた結果(=getPopularSongs)をresultに格納する
+    const result = await spotify.getPopularSongs();
+    console.log(result);
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-900 text-white">
