@@ -10,6 +10,8 @@ export default function App() {
   //取得したデータを表示する
   useEffect(() => {
     async function init() {
+      setIsLoading(true);
+
       //初期化
       const spotifyClient = await SpotifyClient.initialize();
       setSpotify(spotifyClient);
@@ -19,7 +21,7 @@ export default function App() {
       console.log(result);
 
       //stateに保存
-      setPopularSongs(result.tracks.items);
+      setPopularSongs(result);
 
       setIsLoading(false);
     }
@@ -34,7 +36,7 @@ export default function App() {
         </header>
         <section>
           <h2 className="text-2xl font-semibold mb-5">Popular Songs</h2>
-          {isLoading ? <p>Loading...</p> : <SongList songs={popularSongs} />}
+          <SongList songs={popularSongs} />
         </section>
       </main>
     </div>
