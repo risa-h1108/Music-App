@@ -3,25 +3,28 @@ import SpotifyClient from "./lib/spotify";
 import { SongList } from "./components/SongList";
 
 export default function App() {
-  const [isLoading, setIsLoading] = useState(null);
-  const [PopularSongs, setPopularSongs] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [popularSongs, setPopularSongs] = useState([]);
+  const [spotify, setSpotify] = useState(null);
 
   //取得したデータを表示する
   useEffect(() => {
     async function init() {
-      const spotify = await SpotifyClient.initialize();
-      fetchPopularSongs();
+      //初期化
+      const spotifyClient = await SpotifyClient.initialize();
+      setSpotify(spotifyClient);
+
+      //曲取得、Apiを叩いた結果(=getPopularSongs)をresultに格納する
+      const result = await spotifyClient.getPopularSongs();
+      console.log(result);
+
+      //stateに保存
+      setPopularSongs(result.tracks.items);
+
+      setIsLoading(false);
     }
     init();
   }, []);
-
-  const fetchPopularSongs = async () => {
-    //ローディングする
-    setIsLoading(true);
-    //Apiを叩いた結果(=getPopularSongs)をresultに格納する
-    const result = await spotify.getPopularSongs();
-    console.log(result);
-  };
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-900 text-white">
@@ -31,7 +34,7 @@ export default function App() {
         </header>
         <section>
           <h2 className="text-2xl font-semibold mb-5">Popular Songs</h2>
-          <SongList />
+          {isLoading ? <p>Loading...</p> : <SongList songs={popularSongs} />}
         </section>
       </main>
     </div>

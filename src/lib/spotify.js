@@ -30,7 +30,7 @@ class SpotifyClient {
       "https://api.spotify.com/v1/playlists/5SLPaOxQyJ8Ne9zpmTOvSe",
       {
         headers: {
-          Authorization: "Bearer " + this.token,
+          Authorization: `Bearer ${this.accessToken}`,
         },
       },
     );
