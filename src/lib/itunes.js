@@ -1,10 +1,15 @@
 import axios from "axios";
 
 class ItunesClient {
-  async getPopularSongs() {
-    const response = await axios.get(
-      "https://itunes.apple.com/search?term=jpop&entity=song&limit=20",
-    );
+  async searchSongs(term, limit = 20, offset = 0) {
+    const response = await axios.get(`https://itunes.apple.com/search`, {
+      params: {
+        term: term,
+        entity: "song",
+        limit: limit,
+        offset: offset,
+      },
+    });
 
     return response.data.results;
   }
