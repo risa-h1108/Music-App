@@ -4,10 +4,10 @@ class ItunesClient {
   async searchSongs(term, limit = 20, offset = 0) {
     const response = await axios.get(`https://itunes.apple.com/search`, {
       params: {
-        term: term,
-        entity: "song",
-        limit: limit,
-        offset: offset,
+        term: term, //検索キーワード
+        entity: "song", //song指定
+        limit: limit, //曲数
+        offset: offset, //ページ
       },
     });
 
