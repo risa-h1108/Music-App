@@ -8,7 +8,8 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [popularSongs, setPopularSongs] = useState([]);
   const [term, setTerms] = useState("j-pop");
-  const [searchedSongs, setSearchedSongs] = useState();
+  const [searchedSongs, setSearchedSongs] = useState([]);
+  const [page, setPage] = useState(1);
   const isSearchedResult = searchedSongs != null;
   const limit = 20;
 
@@ -30,14 +31,35 @@ export default function App() {
     setTerms(e.target.value);
   };
 
-  const searchSongs = async (page) => {
+  const searchSongs = async (page = 1) => {
+    // onSubmit={searchSongs} のsearchSongsの引数がなしでundefinedにならないようにデフォルト値（＝1）を渡すよう記載
+    console.log("searchSongs called", term, page);
+
+    setPage(page); //検索ボタンを押したらpage=1（1ページ目）に戻す
     setIsLoading(true);
     const offset = parseInt(page) ? (parseInt(page) - 1) * limit : 0; //何ページを表示するか
+    console.log("offset:", offset);
+
     const client = new ItunesClient();
     const result = await client.searchSongs(term, limit, offset);
 
     setSearchedSongs(result);
     setIsLoading(false);
+  };
+
+  const moveToNext = async () => {
+    console.log("next clicked");
+
+    const nextPage = page + 1;
+    await searchSongs(nextPage);
+    setPage(nextPage);
+  };
+
+  const moveToPrev = async () => {
+    console.log("prev clicked");
+    const prevPage = page - 1;
+    await searchSongs(prevPage);
+    setPage(prevPage);
   };
 
   return (
@@ -47,6 +69,7 @@ export default function App() {
           <h1 className="text-4xl font-bold">Music App</h1>
         </header>
         <SearchInput onInputChange={handleInputChange} onSubmit={searchSongs} />
+
         <section>
           <h2 className="text-2xl font-semibold mb-5">
             {isSearchedResult ? "Search Results" : "Popular Songs"}
@@ -55,7 +78,9 @@ export default function App() {
             isLoading={isLoading}
             songs={isSearchedResult ? searchedSongs : popularSongs}
           />
-          {isSearchedResult && <Pagination />}
+          {isSearchedResult && (
+            <Pagination onPrev={moveToPrev} onNext={moveToNext} />
+          )}
         </section>
       </main>
     </div>

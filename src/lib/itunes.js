@@ -6,8 +6,8 @@ class ItunesClient {
       params: {
         term: term, //検索キーワード
         entity: "song", //song指定
-        limit: limit, //曲数
-        offset: offset, //ページ
+        limit: limit, //データの取得件数の制限
+        offset: offset, //先頭（1曲目）から、どれだけ離れているか（相対的な距離や位置）を表す値
       },
     });
 
