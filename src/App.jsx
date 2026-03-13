@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ItunesClient from "./lib/itunes";
 import { SongList } from "./components/SongList";
 import { SearchInput } from "./components/SearchInput";
+import { Pagination } from "./components/Pagination";
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(false);
@@ -9,6 +10,7 @@ export default function App() {
   const [term, setTerms] = useState("j-pop");
   const [searchedSongs, setSearchedSongs] = useState();
   const isSearchedResult = searchedSongs != null;
+  const limit = 20;
 
   useEffect(() => {
     async function init() {
@@ -28,11 +30,11 @@ export default function App() {
     setTerms(e.target.value);
   };
 
-  const searchSongs = async () => {
+  const searchSongs = async (page) => {
     setIsLoading(true);
-
+    const offset = parseInt(page) ? (parseInt(page) - 1) * limit : 0; //何ページを表示するか
     const client = new ItunesClient();
-    const result = await client.searchSongs(term);
+    const result = await client.searchSongs(term, limit, offset);
 
     setSearchedSongs(result);
     setIsLoading(false);
@@ -53,6 +55,7 @@ export default function App() {
             isLoading={isLoading}
             songs={isSearchedResult ? searchedSongs : popularSongs}
           />
+          {isSearchedResult && <Pagination />}
         </section>
       </main>
     </div>

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 class ItunesClient {
-  async searchSongs(term, limit = 20, offset = 0) {
+  async searchSongs(term, limit = 20, offset) {
     const response = await axios.get(`https://itunes.apple.com/search`, {
       params: {
         term: term, //検索キーワード
