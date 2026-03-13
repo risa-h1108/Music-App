@@ -10,7 +10,7 @@ export default function App() {
   const [term, setTerms] = useState("j-pop");
   const [searchedSongs, setSearchedSongs] = useState([]);
   const [page, setPage] = useState(1);
-  const isSearchedResult = searchedSongs != null;
+  const isSearchedResult = searchedSongs.length > 0;
   const limit = 20;
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export default function App() {
 
     setPage(page); //検索ボタンを押したらpage=1（1ページ目）に戻す
     setIsLoading(true);
-    const offset = parseInt(page) ? (parseInt(page) - 1) * limit : 0; //何ページを表示するか
+    const offset = (page - 1) * limit; //何ページを表示するか
     console.log("offset:", offset);
 
     const client = new ItunesClient();
@@ -79,41 +79,15 @@ export default function App() {
             songs={isSearchedResult ? searchedSongs : popularSongs}
           />
           {isSearchedResult && (
-            <Pagination onPrev={moveToPrev} onNext={moveToNext} />
+            <Pagination
+              onPrev={moveToPrev}
+              onNext={moveToNext}
+              disablePrev={page === 1}
+              disableNext={searchedSongs.length < limit}
+            />
           )}
         </section>
       </main>
     </div>
   );
 }
-
-//Spotify用で書いたコード
-// import { useEffect, useState } from "react";
-// import SpotifyClient from "./lib/itunes";
-// import { SongList } from "./components/SongList";
-
-// export default function App() {
-//   const [isLoading, setIsLoading] = useState(false);
-//   const [popularSongs, setPopularSongs] = useState([]);
-//   const [spotify, setSpotify] = useState(null);
-
-//   //取得したデータを表示する
-//   useEffect(() => {
-//     async function init() {
-//       setIsLoading(true);
-
-//       //初期化
-//       const spotifyClient = await SpotifyClient.initialize();
-//       setSpotify(spotifyClient);
-
-//       //曲取得、Apiを叩いた結果(=getPopularSongs)をresultに格納する
-//       const result = await spotifyClient.getPopularSongs();
-
-//       const popularSongs = result.items;
-//       console.log(popularSongs);
-
-//       setPopularSongs(popularSongs);
-//       setIsLoading(false);
-//     }
-//     init();
-//   }, []);
