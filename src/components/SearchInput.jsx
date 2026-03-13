@@ -10,7 +10,7 @@ export function SearchInput(props) {
         placeholder="探したい曲を入力してください"
       />
       <button
-        onClick={props.onSubmit}
+        onClick={() => props.onSubmit(1)} //page=1が呼ばれる
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-r-lg"
       >
         <FontAwesomeIcon icon={faSearch} />

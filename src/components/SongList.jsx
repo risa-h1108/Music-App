@@ -8,6 +8,7 @@ export function SongList(props) {
         <FontAwesomeIcon icon={faSpinner} spin size="3x" />
       </div>
     );
+  console.log("songs:", props.songs);
 
   return (
     <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
